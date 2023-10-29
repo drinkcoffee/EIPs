@@ -46,10 +46,70 @@ TODO Things to be defined:
 * Storage slot of the total number of validators in the Validator Set contract.
 * Address of L2 to L1 bridge contract.
 * Storage slot of WithdrawTrieRoot in L2 to L1 bridge contract.
+* Validator signing configuration: 
+  * ECDSA secp256k1 with KECCAK256
+  * Aggregated BLS 12-381 with KECCAK256
 
 ### Validator Contract
 
-TODO Explain the minimal set of information needed in the validator set contract. 
+The information stored in the validator contract depends on the validator signing configuration.
+
+#### ECDSA secp256k1 with KECCAK256
+
+Validators are stored in a mapping and the total number of validators is stored as a uint256 as shown below.
+
+```solidity
+mapping (address => uint256) validatorStakes;
+uint256 numValidators;
+```
+
+Validators are deemed to be active if the uint256 value for a validatorStakes's address is non-zero.
+
+The storage slot specified in the initialisation is where the ```validatorStakes``` variable appears in the storage map. The storage slot for a validator's entry in the mapping can be calculated by calculating the equation shown below.
+
+```
+Validator Storage Slot = Keccak256(Storage Slot of Mapping, Address of Validator)
+```
+
+
+#### BLS 12-381 with KECCAK256
+
+Validators are stored in a mapping and the total number of validators is stored as a uint256 as shown below.
+
+```solidity
+struct ValidatorInfo {
+  uint256 validatorStake
+  bytes publicKey;
+}
+
+mapping (bytes32 => uint256) validators;
+uint256 numValidators;
+```
+
+Validators are identified by an identifier. This identifier could be the keccak256 of the validator's public key.
+
+Validators are deemed to be active if the validatorStake value for a validator is non-zero.
+
+The storage slot specified in the initialisation is where the ```validators``` variable appears in the storage map. The storage slot for a validator's stake in the mapping can be calculated by calculating the equation shown below.
+
+```
+Validator Stake Slot = Keccak256(Storage Slot of Mapping, Validator Identifier)
+```
+
+The storage slot for a validator's public key in the mapping can be calculated by calculating the equation shown below.
+
+```
+Validator Public Key Slot = Keccak256(Storage Slot of Mapping, Validator Identifier) + 1
+```
+
+
+
+### L2 to L1 Bridge Contract
+
+This section defines the requirements related to the L2 to L1 bridge contract.
+
+TODO
+
 
 ### JSON RPC APIs
 
