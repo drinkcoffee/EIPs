@@ -67,6 +67,10 @@ TODO Explain the minimal set of information needed in the validator set contract
   * Chain id: Hex string.
   * Block Header: TODO
   * Transactions: Array of TODO
+  * FinalBlockStorage: Array of storage information after the last transaction in the block. This storage information includes the storage slots for:
+    * WithdrawaTrieRoot for the L2 to L1 bridge.
+    * Each validator that signed the block header.
+    * Total number of validators.
   * TxStorageTraces: TODO Array of storage information for the start of each transaction
   * ExecutionResults: TODO 
   * StartL1QueueIndex: TODO
