@@ -309,12 +309,6 @@ The following table describes the information contained in the ```BlockHeaderTyp
   <td>Hex string</td>
   <td>EIP 1559 base fee. TODO: Should EIP 1559 be optional?</td>
 </tr>
-<tr>
-  <td></td>
-  <td></td>
-  <td></td>
-  <td></td>
-</tr>
 </tbody>
 </table>
 
@@ -323,7 +317,91 @@ The following table describes the information contained in the ```BlockHeaderTyp
 
 The following table describes the information contained in the ```TransactionType```.
 
-TODO
+<table>
+<thead>
+<tr>
+  <th>Field</th>
+  <th>JSON Name</th>
+  <th>JSON Type</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Type</td>
+  <td>type</td>
+  <td>Number</td>
+  <td></td>
+</tr>
+<tr>
+  <td>Nonce</td>
+  <td>none</td>
+  <td>Number</td>
+  <td></td>
+</tr>
+<tr>
+  <td>Gas</td>
+  <td>gas</td>
+  <td>Number</td>
+  <td></td>
+</tr>
+<tr>
+  <td>Gas Price</td>
+  <td>gasPrice</td>
+  <td>Hex string</td>
+  <td></td>
+</tr>
+<tr>
+  <td>From</td>
+  <td>from</td>
+  <td>Hex string</td>
+  <td>EOA that submitted this transaction.</td>
+</tr>
+<tr>
+  <td>To</td>
+  <td>to</td>
+  <td>Hex string</td>
+  <td>EOA of contract address that transaction targetted at.</td>
+</tr>
+<tr>
+  <td>Value</td>
+  <td>value</td>
+  <td>Hex string</td>
+  <td></td>
+</tr>
+<tr>
+  <td>Data</td>
+  <td>data</td>
+  <td>Hex string</td>
+  <td>Transactoin data. For ABI encoding compliant contracts, this is a function selector followed by parameters.</td>
+</tr>
+<tr>
+  <td>V</td>
+  <td>v</td>
+  <td>Hex string</td>
+  <td></td>
+</tr>
+<tr>
+  <td>R</td>
+  <td>r</td>
+  <td>Hex string</td>
+  <td></td>
+</tr>
+<tr>
+  <td>S</td>
+  <td>s</td>
+  <td>Hex string</td>
+  <td></td>
+</tr>
+<tr>
+  <td>IsCreate</td>
+  <td>isCreate</td>
+  <td>Boolean</td>
+  <td></td>
+</tr>
+</tbody>
+</table>
+
 
 ##### StorageType
 
