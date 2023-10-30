@@ -45,7 +45,9 @@ TODO Things to be defined:
 * Storage slot of validator set map in Validator Set contract.
 * Storage slot of the total number of validators in the Validator Set contract.
 * Address of L2 to L1 bridge contract.
-* Storage slot of WithdrawTrieRoot in L2 to L1 bridge contract.
+* Storage slot of WithdrawTreeRoot in the L2 to L1 bridge contract.
+* Address of L1 to L2 bridge contract.
+* Storage slot of DepositTreeRoot in the L1 to L2 bridge contract.
 * Validator signing configuration: 
   * ECDSA secp256k1 with KECCAK256
   * Aggregated BLS 12-381 with KECCAK256
@@ -105,12 +107,26 @@ Validator Public Key Slot = Keccak256(Storage Slot of Mapping, Validator Identif
 ```
 
 
+### L1 to L2 Bridge Contract
+
+This section defines the requirements related to the L1 to L2 bridge contract.
+
+All rollups MUST have an L1 to L2 arbitrary message bridge contract. The contract MUST contain a storage value ```l1L2DepositIndex```, that indicates the sequence number of the next L1 to L2 message to be processed on L2.
+
+```solidity
+bytes32 l1L2DepositIndex;
+```
 
 ### L2 to L1 Bridge Contract
 
 This section defines the requirements related to the L2 to L1 bridge contract.
 
-TODO
+All rollups MUST have an L2 to L1 arbitrary message bridge contract. The contract MUST contain a storage value ```l2L1WithdrawalTreeRoot```, that summarises the messages that have been communicated between L2 and L1.
+
+```solidity
+bytes32 l2L1WithdrawalTreeRoot;
+```
+
 
 
 
@@ -156,7 +172,8 @@ The following table describes the information contained in the ```BlockInformati
   <td>Array of StorageType</td>
   <td>Array of storage information after the last transaction in the block. This storage information includes the storage slots for:
      <ul>
-      <li>WithdrawaTrieRoot for the L2 to L1 bridge.</li>
+      <li>DepositTreeRoot for the L1 to L2 arbitrary message bridge.</li>
+      <li>WithdrawalTreeRoot for the L2 to L1 arbitrary message bridge.</li>
       <li>Each validator that signed the block header.</li>
       <li>Total number of validators.</li>
     </ul>
@@ -173,12 +190,6 @@ The following table describes the information contained in the ```BlockInformati
   <td>executionResults</td>
   <td>Array of ExecutionResultType</td>
   <td>One execution result for each transaction in the block.</td>
-</tr>
-<tr>
-  <td>StartL1QueueIndex</td>
-  <td>startL1QueueIndex</td>
-  <td>Hex string</td>
-  <td>Index into the L1 bridge queue at the start of the block.</td>
 </tr>
 </tbody>
 </table>
@@ -370,6 +381,14 @@ Having a validator contract that defines which entities can approve blocks is us
 * Proving of validator changes is done as part of transaction proving. That is, when validators are controlled by a contract, transactions are used to add or remove validators. Provers then prove the transactions related to validator changes in the same way as they prove any other transaction. 
 * Arbitrary logic can be applied used for adding or removing validators. That is, the validator contract can support any logic for controlling validators. From a proving system perspective, the only thing that needs to be defined is the list of approved validators.
 
+
+### L1 to L2 Bridge Contract
+
+The ```l1L2DepositIndex``` is the only storage value defined for the L1 to L2 bridge. The expectation is that messages with sequence numbers below this sequence number could be submitted to the L1 to L2 Bridge Contract for processing. The bridge contract could contain the root of a Sparse Merkle Tree of all crosschain messages that can be processed. However, the precise bridging methodology is not defined in this document.
+
+#### L2 to L1 Bridge Contract
+
+The ```l2L1WithdrawalTreeRoot``` is the only storage value defined for the L2 to L1 bridge. This is the root of a Sparse Merkle Tree of all crosschain messages that have been processed on L2. When this value is available via the proof on L1, users will be able to submit exit transactions based on this Merkle Tree Root value. 
 
 ### Block Information data structure
 
