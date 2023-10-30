@@ -208,7 +208,7 @@ The following table describes the information contained in the ```BlockHeaderTyp
   <td>UncleHash</td>
   <td>sha3Uncles</td>
   <td>Hex string</td>
-  <td>Hash or Ommers. ```0x00``` if the consensus protocol does not support Ommers.</td>
+  <td>Hash or Ommers. <code>0x00</code> if the consensus protocol does not support Ommers.</td>
 </tr>
 <tr>
   <td>Coinbase</td>
@@ -244,7 +244,7 @@ The following table describes the information contained in the ```BlockHeaderTyp
   <td>Difficulty</td>
   <td>difficulty</td>
   <td>Hex string</td>
-  <td>Block difficults, previous value of RANDAO, or ```0x00``` depending on the decentralized sequencer.</td>
+  <td>Block difficults, previous value of RANDAO, or <code>0x00</code> depending on the decentralized sequencer.</td>
 </tr>
 <tr>
   <td>Block Number</td>
