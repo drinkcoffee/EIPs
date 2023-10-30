@@ -141,7 +141,7 @@ The following table describes the information contained in the ```BlockInformati
 <tr>
   <td>Block Header</td>
   <td>header</td>
-  <td>BlockHeaderType</td>
+  <td><a href="#BlockHeaderType">BlockHeaderType</a></td>
   <td>Block header of block being proven.</td>
 </tr>
 <tr>
