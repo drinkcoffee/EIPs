@@ -49,6 +49,8 @@ TODO Things to be defined:
 * Validator signing configuration: 
   * ECDSA secp256k1 with KECCAK256
   * Aggregated BLS 12-381 with KECCAK256
+* Storage proof format. 
+  * Merkle Patricia Trie.
 
 ### Validator Contract
 
@@ -111,7 +113,98 @@ This section defines the requirements related to the L2 to L1 bridge contract.
 TODO
 
 
+
 ### JSON RPC APIs
+
+#### Data Types
+
+##### BlockInformationType
+
+The following table describes the information contained in the ```BlockInformationType```.
+
+<table>
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Type</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Chain Id</td>
+  <td>Hex string</td>
+  <td>Chain id of rollup.</td>
+</tr>
+<tr>
+  <td>Block Header</td>
+  <td>BlockHeaderType</td>
+  <td>Block header of block being proven.</td>
+</tr>
+<tr>
+  <td>Transactions</td>
+  <td>Array of TransactionType</td>
+  <td>Transactions that executed in the block being proven.</td>
+</tr>
+<tr>
+  <td rowspan=4>Final Block Storage</td>
+  <td rowspan=4>Array of StorageType</td>
+  <td>Array of storage information after the last transaction in the block. This storage information includes the storage slots for:
+      <tr><td>WithdrawaTrieRoot for the L2 to L1 bridge.</td></tr>
+      <tr><td>Each validator that signed the block header.</td></tr>
+      <tr><td>Total number of validators.</td></tr>
+  </td>
+</tr>
+<tr>
+  <td>TxStorageTraces</td>
+  <td>Array of StorageTraceType</td>
+  <td>Array of storage information for the start of each transaction.</td>
+</tr>
+<tr>
+  <td>ExecutionResults</td>
+  <td>Array of ExecutionResultType</td>
+  <td>One execution result for each transaction in the block.</td>
+</tr>
+<tr>
+  <td>StartL1QueueIndex</td>
+  <td>Hex string</td>
+  <td>Index into the L1 bridge queue at the end of the block.</td>
+</tr>
+</tbody>
+</table>
+
+
+##### BlockHeaderType
+
+The following table describes the information contained in the ```BlockHeaderType```.
+
+TODO
+
+##### TransactionType
+
+The following table describes the information contained in the ```TransactionType```.
+
+TODO
+
+##### StorageType
+
+The following table describes the information contained in the ```StorageType```.
+
+TODO
+
+##### StorageTraceType
+
+The following table describes the information contained in the ```StorageTraceType```.
+
+TODO
+
+
+##### ExecutionResultType
+
+The following table describes the information contained in the ```ExecutionResultType```.
+
+TODO
+
 
 
 #### getBlockTraceByNumber
@@ -122,18 +215,7 @@ TODO
 
 *Returns*:
 
-* Block information data structure:
-
-  * Chain id: Hex string.
-  * Block Header: TODO
-  * Transactions: Array of TODO
-  * FinalBlockStorage: Array of storage information after the last transaction in the block. This storage information includes the storage slots for:
-    * WithdrawaTrieRoot for the L2 to L1 bridge.
-    * Each validator that signed the block header.
-    * Total number of validators.
-  * TxStorageTraces: TODO Array of storage information for the start of each transaction
-  * ExecutionResults: TODO 
-  * StartL1QueueIndex: TODO
+* Block information: BlockInformationType.
 
 
 #### getBlockTraceByHash
@@ -144,7 +226,7 @@ TODO
 
 *Returns*:
 
-* Block information data structure. See `getBlockTraceByNumber`.
+* Block information: BlockInformationType.
 
 
 
