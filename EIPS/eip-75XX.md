@@ -200,7 +200,7 @@ The following table describes the information contained in the ```BlockHeaderTyp
 <tbody>
 <tr>
   <td>ParentHash</td>
-  <th>parentHash</th>
+  <td>parentHash</td>
   <td>Hex string</td>
   <td>Block hash of parent block.</td>
 </tr>
