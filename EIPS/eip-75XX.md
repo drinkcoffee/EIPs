@@ -126,49 +126,59 @@ The following table describes the information contained in the ```BlockInformati
 <thead>
 <tr>
   <th>Field</th>
-  <th>Type</th>
+  <th>JSON Name<th>
+  <th>JSON Type</th>
   <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
   <td>Chain Id</td>
+  <td>chainID</td>
   <td>Hex string</td>
   <td>Chain id of rollup.</td>
 </tr>
 <tr>
   <td>Block Header</td>
+  <td>header</td>
   <td>BlockHeaderType</td>
   <td>Block header of block being proven.</td>
 </tr>
 <tr>
   <td>Transactions</td>
+  <td>transactions</td>
   <td>Array of TransactionType</td>
   <td>Transactions that executed in the block being proven.</td>
 </tr>
 <tr>
-  <td rowspan=4>Final Block Storage</td>
-  <td rowspan=4>Array of StorageType</td>
+  <td>Final Block Storage</td>
+  <td> blockStorage</td>
+  <td>Array of StorageType</td>
   <td>Array of storage information after the last transaction in the block. This storage information includes the storage slots for:
-      <tr><td>WithdrawaTrieRoot for the L2 to L1 bridge.</td></tr>
-      <tr><td>Each validator that signed the block header.</td></tr>
-      <tr><td>Total number of validators.</td></tr>
+     <ul>
+      <li>WithdrawaTrieRoot for the L2 to L1 bridge.</li>
+      <li>Each validator that signed the block header.</li>
+      <li>Total number of validators.</li>
+    </ul>
   </td>
 </tr>
 <tr>
   <td>TxStorageTraces</td>
+  <td>storageTraces</td>
   <td>Array of StorageTraceType</td>
-  <td>Array of storage information for the start of each transaction.</td>
+  <td>Storage information at the start of each transaction. The storage information is for any storage slot within any account that is read from or written to during the execution of the transaction.</td>
 </tr>
 <tr>
   <td>ExecutionResults</td>
+  <td>executionResults</td>
   <td>Array of ExecutionResultType</td>
   <td>One execution result for each transaction in the block.</td>
 </tr>
 <tr>
   <td>StartL1QueueIndex</td>
+  <td>startL1QueueIndex</td>
   <td>Hex string</td>
-  <td>Index into the L1 bridge queue at the end of the block.</td>
+  <td>Index into the L1 bridge queue at the start of the block.</td>
 </tr>
 </tbody>
 </table>
@@ -178,7 +188,125 @@ The following table describes the information contained in the ```BlockInformati
 
 The following table describes the information contained in the ```BlockHeaderType```.
 
-TODO
+<table>
+<thead>
+<tr>
+  <th>Field</th>
+  <th>JSON Name</th>
+  <th>JSON Type</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>ParentHash</td>
+  <th>parentHash</th>
+  <td>Hex string</td>
+  <td>Block hash of parent block.</td>
+</tr>
+<tr>
+  <td>UncleHash</td>
+  <td>sha3Uncles</td>
+  <td>Hex string</td>
+  <td>Hash or Ommers. ```0x00``` if the consensus protocol does not support Ommers.</td>
+</tr>
+<tr>
+  <td>Coinbase</td>
+  <td>miner</td>
+  <td>Hex string</td>
+  <td>Address of entity that mined this block.</td>
+</tr>
+<tr>
+  <td>State Root</td>
+  <td>stateRoot</td>
+  <td>Hex string</td>
+  <td>Root of storage tree.</td>
+</tr>
+<tr>
+  <td>Transaction Root</td>
+  <td>transactionsRoot</td>
+  <td>Hex string</td>
+  <td>Root of transaction tree for transactions contained in this block.</td>
+</tr>
+<tr>
+  <td>Transaction Receipts Root</td>
+  <td>receiptsRoot</td>
+  <td>Hex string</td>
+  <td>Root of transaction receipts tree for transactions contained in this block.</td>
+</tr>
+<tr>
+  <td>Bloom</td>
+  <td>logsBloom</td>
+  <td>Hex string</td>
+  <td>Bloom filter for logs emitted by transactions in this block.</td>
+</tr>
+<tr>
+  <td>Difficulty</td>
+  <td>difficulty</td>
+  <td>Hex string</td>
+  <td>Block difficults, previous value of RANDAO, or ```0x00``` depending on the decentralized sequencer.</td>
+</tr>
+<tr>
+  <td>Block Number</td>
+  <td>number</td>
+  <td>Hex string</td>
+  <td>Block number. Block 0 is the virtual block created from the genesis file.</td>
+</tr>
+<tr>
+  <td>Gas Limit</td>
+  <td>getLimit</td>
+  <td>Hex string</td>
+  <td>The maximum amount of gas that could be used in this block.</td>
+</tr>
+<tr>
+  <td>Gas Used</td>
+  <td>getUsed</td>
+  <td>Hex string</td>
+  <td>The amount of gas used by the transactions in this block.</td>
+</tr>
+<tr>
+  <td>Block time stamp</td>
+  <td>timestamp</td>
+  <td>Hex string</td>
+  <td>The time a sequencer produced this block.</td>
+</tr>
+<tr>
+  <td>Extra Data</td>
+  <td>extraData</td>
+  <td>Hex string</td>
+  <td>RLP encoded information about the consensus algorithm and signers. The sub-fields are:
+    <ul>
+     <li>Consensus algorithm and signature type identifier. TODO for possible values.</li>
+     <li>Array of signatures. TODO for format. Format is based on consensus algorithm and signature format</li>
+  </td>
+</tr>
+<tr>
+  <td>Mix Digest</td>
+  <td>mixHash</td>
+  <td>Hex string</td>
+  <td>TODO</td>
+</tr>
+<tr>
+  <td>Block Nonce</td>
+  <td>nonce</td>
+  <td>Hex string</td>
+  <td>TODO</td>
+</tr>
+<tr>
+  <td>Base Fee</td>
+  <td>baseFeePerGas</td>
+  <td>Hex string</td>
+  <td>EIP 1559 base fee. TODO: Should EIP 1559 be optional?</td>
+</tr>
+<tr>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr>
+</tbody>
+</table>
+
 
 ##### TransactionType
 
