@@ -126,7 +126,7 @@ The following table describes the information contained in the ```BlockInformati
 <thead>
 <tr>
   <th>Field</th>
-  <th>JSON Name<th>
+  <th>JSON Name</th>
   <th>JSON Type</th>
   <th>Description</th>
 </tr>
