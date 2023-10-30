@@ -150,9 +150,33 @@ TODO
 
 ## Rationale
 
-TBD
+This section explains the rationale behind design decisions contained in this specification.
 
-TODO: Explain why validator contract on chain.
+
+### Validator Contract
+
+Having a validator contract that defines which entities can approve blocks is useful for the following reasons:
+
+* Proving of validator changes is done as part of transaction proving. That is, when validators are controlled by a contract, transactions are used to add or remove validators. Provers then prove the transactions related to validator changes in the same way as they prove any other transaction. 
+* Arbitrary logic can be applied used for adding or removing validators. That is, the validator contract can support any logic for controlling validators. From a proving system perspective, the only thing that needs to be defined is the list of approved validators.
+
+
+### Block Information data structure
+
+The following sections explain why each piece of information is required in the Block Information data structure.
+
+#### Chain Id
+
+The ```Chain Id``` is required to ensure the block information is not mistakenly replayed for a different rollup.
+
+#### Block Header
+
+The ```Block Header``` includes information required to prove consensus.
+
+
+
+
+
 
 TODO: Explain the rationale for each piece of data being returned.
 
