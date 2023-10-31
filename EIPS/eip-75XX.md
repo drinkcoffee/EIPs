@@ -120,7 +120,7 @@ The following table describes the information contained in the ```BlockInformati
 </tr>
 <tr>
   <td>Final Block Storage</td>
-  <td> blockStorage</td>
+  <td>blockStorage</td>
   <td>Array of <a href="#StorageType">StorageType</a></td>
   <td>Array of storage information after the last transaction in the block. This storage information includes the storage slots for:
      <ul>
@@ -131,16 +131,16 @@ The following table describes the information contained in the ```BlockInformati
   </td>
 </tr>
 <tr>
-  <td>TxStorageTraces</td>
-  <td>storageTraces</td>
+  <td>Transaction Storage</td>
+  <td>transactionStorage</td>
   <td>Array of <a href="#StorageTraceType">StorageTraceType</a></td>
   <td>Storage information at the start of each transaction. The storage information is for any storage slot within any account that is read from or written to during the execution of the transaction.</td>
 </tr>
 <tr>
-  <td>ExecutionResults</td>
-  <td>executionResults</td>
-  <td>Array of <a href="#ExecutionResultType">ExecutionResultType</a></td>
-  <td>One execution result for each transaction in the block.</td>
+  <td>Transaction Receipts</td>
+  <td>transactionReceipts</td>
+  <td>Array of <a href="#ReceiptType">ReceiptType</a></td>
+  <td>One transaction receipt for each transaction in the block.</td>
 </tr>
 </tbody>
 </table>
@@ -405,12 +405,6 @@ Storage Type contains a proof for a specific storage slot in a specific account.
   <td>Storage root prior to executing the transaction.</td>
 </tr>
 <tr>
-  <td>StorageRootAfter</td>
-  <td>storageRootAfter</td>
-  <td>Hex string</td>
-  <td>Storage root after to executing the transaction.</td>
-</tr>
-<tr>
   <td>Account Proofs</td>
   <td>proofs</td>
   <td>Array of <a href="#AccountProofType">AccountProofType</a></td>
@@ -430,13 +424,6 @@ Storage Type contains a proof for a specific storage slot in a specific account.
 </tr>
 </tbody>
 </table>
-
-
-#### ExecutionResultType
-
-The following table describes the information contained in the ```ExecutionResultType```.
-
-TODO
 
 
 
@@ -525,6 +512,168 @@ Storage Proof Type contains a proof for a specific storage slot in a specific ac
   <td>proof</td>
   <td>Array of hex string</td>
   <td>Merkle proof for a storage slot. The array of hex string is an array of hashes.</td>
+</tr>
+</tbody>
+</table>
+
+
+#### ReceiptType
+
+One ```ReceiptsType``` structure is returned for each transaction. The information in this structure is not needed to prove the execution trace of all the transactions in a block as the block header contains the final state root. However, it will assist the proving of a transaction, providing per-transaction information that can be checked. The following table describes the information contained in the ```ReceiptType```.
+
+<table>
+<thead>
+<tr>
+  <th>Field</th>
+  <th>JSON Name</th>
+  <th>JSON Type</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Type</td>
+  <td>type</td>
+  <td>Hex string</td>
+  <td>Transaction type.</td>
+</tr>
+<tr>
+  <td>Post State</td>
+  <td>postState</td>
+  <td>Hex string</td>
+  <td>Storage root after to executing the transaction.</td>
+</tr>
+<tr>
+  <td>Status</td>
+  <td>status</td>
+  <td>Boolean</td>
+  <td>True if the transaction did not revert.</td>
+</tr>
+<tr>
+  <td>Cumulative Gas Used</td>
+  <td>gasUsed</td>
+  <td>Number</td>
+  <td>Amount of gas used by this transaction and all previous transactions in the block.</td>
+</tr>
+<tr>
+  <td>Blooms</td>
+  <td>blooms</td>
+  <td>Hex string</td>
+  <td>Bloom filter for log.</td>
+</tr>
+<tr>
+  <td>Logs</td>
+  <td>logs</td>
+  <td>Array of <a href="#LogType">LogType</a></td>
+  <td>Array of events emmitted during the transaction execution.</td>
+</tr>
+<tr>
+  <td>Transaction Hash</td>
+  <td>txHash</td>
+  <td>Hex string</td>
+  <td></td>
+</tr>
+<tr>
+  <td>Contract Address</td>
+  <td>contractAddress</td>
+  <td>Hex string</td>
+  <td>Address of deployed contract if the transaction was a create contract, empty otherwise.</td>
+</tr>
+<tr>
+  <td>Gas Used</td>
+  <td>gasUsed</td>
+  <td>Number</td>
+  <td>Amount of gas used by this transaction.</td>
+</tr>
+<tr>
+  <td>Block Number</td>
+  <td>blockNumber</td>
+  <td>Hex string</td>
+  <td></td>
+</tr>
+<tr>
+  <td>Block Hash</td>
+  <td>blockHash</td>
+  <td>Hex string</td>
+  <td></td>
+</tr>
+<tr>
+  <td>Transaction Index</td>
+  <td>txIndex</td>
+  <td>Number</td>
+  <td>Index of this transaction within the block.</td>
+</tr>
+<tr>
+  <td>Return Value</td>
+  <td>returnValue</td>
+  <td>Hex string</td>
+  <td></td>
+</tr>
+</tbody>
+</table>
+
+
+#### LogType
+
+```LogType``` contains information emitted for one event during the execution of a transaction. The following table describes the information contained in the ```LogType```.
+
+<table>
+<thead>
+<tr>
+  <th>Field</th>
+  <th>JSON Name</th>
+  <th>JSON Type</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Address</td>
+  <td>address</td>
+  <td>Hex string</td>
+  <td>Address of contract that emitted the event.</td>
+</tr>
+<tr>
+  <td>Topics</td>
+  <td>topics</td>
+  <td>Array or Hex string</td>
+  <td>Array of log topics.</td>
+</tr>
+<tr>
+  <td>Data</td>
+  <td>data</td>
+  <td>Hex string</td>
+  <td>Event parameters that are not topics.</td>
+</tr>
+<tr>
+  <td>Block Number</td>
+  <td>blockNumber</td>
+  <td>Hex string</td>
+  <td></td>
+</tr>
+<tr>
+  <td>Block Hash</td>
+  <td>blockHash</td>
+  <td>Hex string</td>
+  <td></td>
+</tr>
+<tr>
+  <td>Transaction Index</td>
+  <td>txIndex</td>
+  <td>Number</td>
+  <td>Index of this transaction within the block.</td>
+</tr>
+<tr>
+  <td>Index</td>
+  <td>index</td>
+  <td>Number</td>
+  <td>Index of this log within the transaction.</td>
+</tr>
+<tr>
+  <td>Removed</td>
+  <td>removed</td>
+  <td>Boolean</td>
+  <td>The ```Removed``` field is true if this log was reverted due to a chain reorganisation.</td>
 </tr>
 </tbody>
 </table>
