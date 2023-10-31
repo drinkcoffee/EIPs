@@ -46,13 +46,14 @@ TODO Things to be defined:
 * Storage slot of the total number of validators in the Validator Set contract.
 * Address of L2 to L1 bridge contract.
 * Storage slot of WithdrawTreeRoot in the L2 to L1 bridge contract.
-* Address of L1 to L2 bridge contract.
-* Storage slot of DepositTreeRoot in the L1 to L2 bridge contract.
 * Validator signing configuration: 
   * ECDSA secp256k1 with KECCAK256
   * Aggregated BLS 12-381 with KECCAK256
 * Storage proof format. 
   * Merkle Patricia Trie.
+* Hash function to use:
+  * Keccak 256
+  * Possiden
 
 ### Validator Contract
 
@@ -107,16 +108,6 @@ Validator Public Key Slot = Keccak256(Storage Slot of Mapping, Validator Identif
 ```
 
 
-### L1 to L2 Bridge Contract
-
-This section defines the requirements related to the L1 to L2 bridge contract.
-
-All rollups MUST have an L1 to L2 arbitrary message bridge contract. The contract MUST contain a storage value ```l1L2DepositIndex```, that indicates the sequence number of the next L1 to L2 message to be processed on L2.
-
-```solidity
-bytes32 l1L2DepositIndex;
-```
-
 ### L2 to L1 Bridge Contract
 
 This section defines the requirements related to the L2 to L1 bridge contract.
@@ -163,16 +154,15 @@ The following table describes the information contained in the ```BlockInformati
 <tr>
   <td>Transactions</td>
   <td>transactions</td>
-  <td>Array of TransactionType</td>
+  <td>Array of <a href="#TransactionType">TransactionType</a></td>
   <td>Transactions that executed in the block being proven.</td>
 </tr>
 <tr>
   <td>Final Block Storage</td>
   <td> blockStorage</td>
-  <td>Array of StorageType</td>
+  <td>Array of <a href="#StorageType">StorageType</a></td>
   <td>Array of storage information after the last transaction in the block. This storage information includes the storage slots for:
      <ul>
-      <li>DepositTreeRoot for the L1 to L2 arbitrary message bridge.</li>
       <li>WithdrawalTreeRoot for the L2 to L1 arbitrary message bridge.</li>
       <li>Each validator that signed the block header.</li>
       <li>Total number of validators.</li>
@@ -182,13 +172,13 @@ The following table describes the information contained in the ```BlockInformati
 <tr>
   <td>TxStorageTraces</td>
   <td>storageTraces</td>
-  <td>Array of StorageTraceType</td>
+  <td>Array of <a href="#StorageTraceType">StorageTraceType</a></td>
   <td>Storage information at the start of each transaction. The storage information is for any storage slot within any account that is read from or written to during the execution of the transaction.</td>
 </tr>
 <tr>
   <td>ExecutionResults</td>
   <td>executionResults</td>
-  <td>Array of ExecutionResultType</td>
+  <td>Array of <a href="#ExecutionResultType">ExecutionResultType</a></td>
   <td>One execution result for each transaction in the block.</td>
 </tr>
 </tbody>
@@ -335,7 +325,7 @@ The following table describes the information contained in the ```TransactionTyp
 </tr>
 <tr>
   <td>Nonce</td>
-  <td>none</td>
+  <td>nonce</td>
   <td>Number</td>
   <td></td>
 </tr>
@@ -373,7 +363,7 @@ The following table describes the information contained in the ```TransactionTyp
   <td>Data</td>
   <td>data</td>
   <td>Hex string</td>
-  <td>Transactoin data. For ABI encoding compliant contracts, this is a function selector followed by parameters.</td>
+  <td>Transaction data. For ABI encoding compliant contracts, this is a function selector followed by parameters.</td>
 </tr>
 <tr>
   <td>V</td>
@@ -405,15 +395,80 @@ The following table describes the information contained in the ```TransactionTyp
 
 ##### StorageType
 
-The following table describes the information contained in the ```StorageType```.
+Storage Type contains a proof for a specific storage slot in a specific account. The following table describes the information contained in the ```StorageType```.
 
-TODO
+<table>
+<thead>
+<tr>
+  <th>Field</th>
+  <th>JSON Name</th>
+  <th>JSON Type</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Account Proofs</td>
+  <td>proofs</td>
+  <td>Array of <a href="#AccountProofType">AccountProofType</a></td>
+  <td>Proof for account information.</td>
+</tr>
+<tr>
+  <td>Storage Proofs</td>
+  <td>storageProofs</td>
+  <td>Array of <a href="#StorageProofType">StorageProofType</a></td>
+  <td>Proofs for storage slots within accounts.</td>
+</tr>
+</tbody>
+</table>
+
 
 ##### StorageTraceType
 
-The following table describes the information contained in the ```StorageTraceType```.
+```StorageTraceType``` defines all of the storage information needed to execute a transaction. The following table describes the information contained in the ```StorageTraceType```.
 
-TODO
+<table>
+<thead>
+<tr>
+  <th>Field</th>
+  <th>JSON Name</th>
+  <th>JSON Type</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>StorageRootBefore</td>
+  <td>storageRootBefore</td>
+  <td>Hex string</td>
+  <td>Storage root prior to executing the transaction.</td>
+</tr>
+<tr>
+  <td>StorageRootAfter</td>
+  <td>storageRootAfter</td>
+  <td>Hex string</td>
+  <td>Storage root after to executing the transaction.</td>
+</tr>
+<tr>
+  <td>Account Proofs</td>
+  <td>proofs</td>
+  <td>Array of <a href="#AccountProofType">AccountProofType</a></td>
+  <td>Proof for account information.</td>
+</tr>
+<tr>
+  <td>Storage Proofs</td>
+  <td>storageProofs</td>
+  <td>Array of <a href="#StorageProofType">StorageProofType</a></td>
+  <td>Proofs for storage slots within accounts.</td>
+</tr>
+<tr>
+  <td>Deletion Proofs</td>
+  <td>deletionProofs</td>
+  <td>Array of <a href="#AccountProofType">AccountProofType</a></td>
+  <td>Proof for accounts that have ```selfdescructed``` during the execution of the transaction.</td>
+</tr>
+</tbody>
+</table>
 
 
 ##### ExecutionResultType
@@ -421,6 +476,97 @@ TODO
 The following table describes the information contained in the ```ExecutionResultType```.
 
 TODO
+
+
+
+##### AccountProofType
+
+Account Proof Type contains a proof for a specific account. The following table describes the information contained in the ```AccountProofType```.
+
+<table>
+<thead>
+<tr>
+  <th>Field</th>
+  <th>JSON Name</th>
+  <th>JSON Type</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Account</td>
+  <td>account</td>
+  <td>Hex string</td>
+  <td>Address of an account.</td>
+</tr>
+<tr>
+  <td>Nonce</td>
+  <td>nonce</td>
+  <td>Number</td>
+  <td>Account nonce.</td>
+</tr>
+<tr>
+  <td>Balance</td>
+  <td>balance</td>
+  <td>Hex string</td>
+  <td>Account balance.</td>
+</tr>
+<tr>
+  <td>Code</td>
+  <td>code</td>
+  <td>Hex string</td>
+  <td>Account's contract code.</td>
+</tr>
+<tr>
+  <td>Proof</td>
+  <td>proof</td>
+  <td>Array of hex string</td>
+  <td>Merkle proof for an account. The array of hex string is an array of hashes.</td>
+</tr>
+</tbody>
+</table>
+
+
+##### StorageProofType
+
+Storage Proof Type contains a proof for a specific storage slot in a specific account. The following table describes the information contained in the ```StorageProofType```.
+
+<table>
+<thead>
+<tr>
+  <th>Field</th>
+  <th>JSON Name</th>
+  <th>JSON Type</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Account</td>
+  <td>account</td>
+  <td>Hex string</td>
+  <td>Address of an account.</td>
+</tr>
+<tr>
+  <td>Slot</td>
+  <td>slot</td>
+  <td>Hex string</td>
+  <td>Storage slot number.</td>
+</tr>
+<tr>
+  <td>Value</td>
+  <td>value</td>
+  <td>Hex string</td>
+  <td>Value at the storage slot.</td>
+</tr>
+<tr>
+  <td>Proof</td>
+  <td>proof</td>
+  <td>Array of hex string</td>
+  <td>Merkle proof for a storage slot. The array of hex string is an array of hashes.</td>
+</tr>
+</tbody>
+</table>
 
 
 
