@@ -55,77 +55,38 @@ TODO Things to be defined:
   * Keccak 256
   * Possiden
 
-### Validator Contract
 
-The information stored in the validator contract depends on the validator signing configuration.
-
-#### ECDSA secp256k1 with KECCAK256
-
-Validators are stored in a mapping and the total number of validators is stored as a uint256 as shown below.
-
-```solidity
-mapping (address => uint256) validatorStakes;
-uint256 numValidators;
-```
-
-Validators are deemed to be active if the uint256 value for a validatorStakes's address is non-zero.
-
-The storage slot specified in the initialisation is where the ```validatorStakes``` variable appears in the storage map. The storage slot for a validator's entry in the mapping can be calculated by calculating the equation shown below.
-
-```
-Validator Storage Slot = Keccak256(Storage Slot of Mapping, Address of Validator)
-```
-
-
-#### BLS 12-381 with KECCAK256
-
-Validators are stored in a mapping and the total number of validators is stored as a uint256 as shown below.
-
-```solidity
-struct ValidatorInfo {
-  uint256 validatorStake
-  bytes publicKey;
-}
-
-mapping (bytes32 => uint256) validators;
-uint256 numValidators;
-```
-
-Validators are identified by an identifier. This identifier could be the keccak256 of the validator's public key.
-
-Validators are deemed to be active if the validatorStake value for a validator is non-zero.
-
-The storage slot specified in the initialisation is where the ```validators``` variable appears in the storage map. The storage slot for a validator's stake in the mapping can be calculated by calculating the equation shown below.
-
-```
-Validator Stake Slot = Keccak256(Storage Slot of Mapping, Validator Identifier)
-```
-
-The storage slot for a validator's public key in the mapping can be calculated by calculating the equation shown below.
-
-```
-Validator Public Key Slot = Keccak256(Storage Slot of Mapping, Validator Identifier) + 1
-```
-
-
-### L2 to L1 Bridge Contract
-
-This section defines the requirements related to the L2 to L1 bridge contract.
-
-All rollups MUST have an L2 to L1 arbitrary message bridge contract. The contract MUST contain a storage value ```l2L1WithdrawalTreeRoot```, that summarises the messages that have been communicated between L2 and L1.
-
-```solidity
-bytes32 l2L1WithdrawalTreeRoot;
-```
 
 
 
 
 ### JSON RPC APIs
 
-#### Data Types
+#### getBlockTraceByNumber
 
-##### BlockInformationType
+*Parameters*: 
+
+* Block number: Hex string.
+
+*Returns*:
+
+* Block information: <a href="#BlockInformationType">BlockInformationType</a>.
+
+
+#### getBlockTraceByHash
+
+*Parameters*: 
+
+* Block hash: Hex string.
+
+*Returns*:
+
+* Block information: <a href="#BlockInformationType">BlockInformationType</a>.
+
+
+### Data Types
+
+#### BlockInformationType
 
 The following table describes the information contained in the ```BlockInformationType```.
 
@@ -185,7 +146,7 @@ The following table describes the information contained in the ```BlockInformati
 </table>
 
 
-##### BlockHeaderType
+#### BlockHeaderType
 
 The following table describes the information contained in the ```BlockHeaderType```.
 
@@ -303,7 +264,7 @@ The following table describes the information contained in the ```BlockHeaderTyp
 </table>
 
 
-##### TransactionType
+#### TransactionType
 
 The following table describes the information contained in the ```TransactionType```.
 
@@ -393,7 +354,7 @@ The following table describes the information contained in the ```TransactionTyp
 </table>
 
 
-##### StorageType
+#### StorageType
 
 Storage Type contains a proof for a specific storage slot in a specific account. The following table describes the information contained in the ```StorageType```.
 
@@ -423,7 +384,7 @@ Storage Type contains a proof for a specific storage slot in a specific account.
 </table>
 
 
-##### StorageTraceType
+#### StorageTraceType
 
 ```StorageTraceType``` defines all of the storage information needed to execute a transaction. The following table describes the information contained in the ```StorageTraceType```.
 
@@ -471,7 +432,7 @@ Storage Type contains a proof for a specific storage slot in a specific account.
 </table>
 
 
-##### ExecutionResultType
+#### ExecutionResultType
 
 The following table describes the information contained in the ```ExecutionResultType```.
 
@@ -479,7 +440,7 @@ TODO
 
 
 
-##### AccountProofType
+#### AccountProofType
 
 Account Proof Type contains a proof for a specific account. The following table describes the information contained in the ```AccountProofType```.
 
@@ -527,7 +488,7 @@ Account Proof Type contains a proof for a specific account. The following table 
 </table>
 
 
-##### StorageProofType
+#### StorageProofType
 
 Storage Proof Type contains a proof for a specific storage slot in a specific account. The following table describes the information contained in the ```StorageProofType```.
 
@@ -569,29 +530,68 @@ Storage Proof Type contains a proof for a specific storage slot in a specific ac
 </table>
 
 
+### Validator Contract
 
-#### getBlockTraceByNumber
+The information stored in the validator contract depends on the validator signing configuration.
 
-*Parameters*: 
+#### ECDSA secp256k1 with KECCAK256
 
-* Block number: Hex string.
+Validators are stored in a mapping and the total number of validators is stored as a uint256 as shown below.
 
-*Returns*:
+```solidity
+mapping (address => uint256) validatorStakes;
+uint256 numValidators;
+```
 
-* Block information: BlockInformationType.
+Validators are deemed to be active if the uint256 value for a validatorStakes's address is non-zero.
 
+The storage slot specified in the initialisation is where the ```validatorStakes``` variable appears in the storage map. The storage slot for a validator's entry in the mapping can be calculated by calculating the equation shown below.
 
-#### getBlockTraceByHash
-
-*Parameters*: 
-
-* Block hash: Hex string.
-
-*Returns*:
-
-* Block information: BlockInformationType.
+```
+Validator Storage Slot = Keccak256(Storage Slot of Mapping, Address of Validator)
+```
 
 
+#### BLS 12-381 with KECCAK256
+
+Validators are stored in a mapping and the total number of validators is stored as a uint256 as shown below.
+
+```solidity
+struct ValidatorInfo {
+  uint256 validatorStake
+  bytes publicKey;
+}
+
+mapping (bytes32 => uint256) validators;
+uint256 numValidators;
+```
+
+Validators are identified by an identifier. This identifier could be the keccak256 of the validator's public key.
+
+Validators are deemed to be active if the validatorStake value for a validator is non-zero.
+
+The storage slot specified in the initialisation is where the ```validators``` variable appears in the storage map. The storage slot for a validator's stake in the mapping can be calculated by calculating the equation shown below.
+
+```
+Validator Stake Slot = Keccak256(Storage Slot of Mapping, Validator Identifier)
+```
+
+The storage slot for a validator's public key in the mapping can be calculated by calculating the equation shown below.
+
+```
+Validator Public Key Slot = Keccak256(Storage Slot of Mapping, Validator Identifier) + 1
+```
+
+
+### L2 to L1 Bridge Contract
+
+This section defines the requirements related to the L2 to L1 bridge contract.
+
+All rollups MUST have an L2 to L1 arbitrary message bridge contract. The contract MUST contain a storage value ```l2L1WithdrawalTreeRoot```, that summarises the messages that have been communicated between L2 and L1.
+
+```solidity
+bytes32 l2L1WithdrawalTreeRoot;
+```
 
 ## Rationale
 
