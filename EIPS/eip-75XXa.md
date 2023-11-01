@@ -13,7 +13,7 @@ created: 2023-10-27
 
 ## Abstract
 
-This EIP defines the interface that allows stateless zero knowledge provers to collect state information from blockchain nodes that are operating as decentralized sequencers. This EIP is designed to be used in conjunction with ![EIP-75XXb](../EIP-75XXb.md), which defines a minimal set of properties for proving consensus, and ![EIP-75XXc](../EIP-75XXc.md), which defines a minimal set of properties for bridging.
+This EIP defines the interface that allows stateless zero knowledge provers to collect state information from blockchain nodes that are operating as decentralized sequencers. This EIP is designed to be used in conjunction with ![EIP-75XXb](./EIP-75XXb.md), which defines a minimal set of properties for proving consensus, and ![EIP-75XXc](./EIP-75XXc.md), which defines a minimal set of properties for bridging.
 
 
 ## Motivation
