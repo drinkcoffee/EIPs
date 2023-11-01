@@ -498,7 +498,11 @@ Storage Proof Type contains a proof for a specific storage slot in a specific ac
 
 #### ReceiptType
 
-One ```ReceiptsType``` structure is returned for each transaction. The information in this structure is not needed to prove the execution trace of all the transactions in a block as the block header contains the final state root. However, it will assist the proving of a transaction, providing per-transaction information that can be checked. The following table describes the information contained in the ```ReceiptType```.
+One ```ReceiptsType``` structure is returned for each transaction. The information in this structure is not needed to prove the execution trace of all the transactions in a block as the block header contains the final state root. However, it will assist the proving of a transaction, providing per-transaction information that can be checked. 
+
+The following table describes the information contained in the ```ReceiptType```. The information mirrors the value returned by <code>eth_getTransactionReceipt</code> with the following exceptions:
+
+* The ```Post Transaction State Root``` should always be returned.
 
 <table>
 <thead>
@@ -506,87 +510,147 @@ One ```ReceiptsType``` structure is returned for each transaction. The informati
   <th>Field</th>
   <th>JSON Name</th>
   <th>JSON Type</th>
+  <th>Pattern</th>
   <th>Description</th>
+  <th>Required</th>
 </tr>
 </thead>
 <tbody>
 <tr>
   <td>Type</td>
   <td>type</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x([0-9,a-f,A-F]?){1,2}$</td>
   <td>Transaction type.</td>
+  <td>No</td>
 </tr>
 <tr>
-  <td>Post State</td>
-  <td>postState</td>
-  <td>Hex string</td>
-  <td>Storage root after to executing the transaction.</td>
+  <td>Transaction Hash</td>
+  <td>txHash</td>
+  <td>String</td>
+  <td>^0x[0-9a-f]{64}$</td>
+  <td></td>
+  <td>Yes</td>
 </tr>
 <tr>
-  <td>Status</td>
-  <td>status</td>
-  <td>Boolean</td>
-  <td>True if the transaction did not revert.</td>
+  <td>Transaction Index</td>
+  <td>transactionIndex</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
+  <td>Index of this transaction within the block.</td>
+  <td>Yes</td>
+</tr>
+<tr>
+  <td>Block Hash</td>
+  <td>blockHash</td>
+  <td>String</td>
+  <td>^0x[0-9a-f]{64}$</td>
+  <td></td>
+  <td>Yes</td>
+</tr>
+<tr>
+  <td>Block Number</td>
+  <td>blockNumber</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
+  <td></td>
+  <td>Yes</td>
+</tr>
+<tr>
+  <td>From</td>
+  <td>from</td>
+  <td>String</td>
+  <td>^0x[0-9,a-f,A-F]{40}$</td>
+  <td></td>
+  <td>Yes</td>
+</tr>
+<tr>
+  <td>To</td>
+  <td>to</td>
+  <td>String</td>
+  <td>Either null or ^0x[0-9,a-f,A-F]{40}$</td>
+  <td><code>Null</code> for contract creation. Recipient address otherwise.</td>
+  <td>No</td>
 </tr>
 <tr>
   <td>Cumulative Gas Used</td>
-  <td>gasUsed</td>
-  <td>Number</td>
+  <td>cumulativeGasUsed</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
   <td>Amount of gas used by this transaction and all previous transactions in the block.</td>
+  <td>Yes</td>
 </tr>
 <tr>
-  <td>Blooms</td>
-  <td>blooms</td>
-  <td>Hex string</td>
-  <td>Bloom filter for log.</td>
+  <td>Gas Used</td>
+  <td>gasUsed</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
+  <td>Amount of gas used by this transaction.</td>
+  <td>Yes</td>
+</tr>
+<tr>
+  <td>Blob Gas Used</td>
+  <td>blobGasUsed</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
+  <td>The amount of blob gas used for this specific transaction. Only specified for blob transactions as defined by EIP-4844.</td>
+  <td>No</td>
+</tr>
+<tr>
+  <td>Contract Address</td>
+  <td>contractAddress</td>
+  <td>String</td>
+  <td>Null or ^0x[0-9,a-f,A-F]{40}$</td>
+  <td>Address of deployed contract if the transaction was a create contract, <code>null</code> otherwise.</td>
+  <td>No</td>
 </tr>
 <tr>
   <td>Logs</td>
   <td>logs</td>
   <td>Array of <a href="#LogType">LogType</a></td>
+  <td></td>
   <td>Array of events emmitted during the transaction execution.</td>
-</tr>
-<tr>
-  <td>Transaction Hash</td>
-  <td>txHash</td>
-  <td>Hex string</td>
   <td></td>
 </tr>
 <tr>
-  <td>Contract Address</td>
-  <td>contractAddress</td>
-  <td>Hex string</td>
-  <td>Address of deployed contract if the transaction was a create contract, empty otherwise.</td>
+  <td>Logs Bloom</td>
+  <td>logBloom</td>
+  <td>String</td>
+  <td>^0x[0-9a-f]{512}$</td>
+  <td>Bloom filter for log.</td>
+  <td>Yes</td>
 </tr>
 <tr>
-  <td>Gas Used</td>
-  <td>gasUsed</td>
-  <td>Number</td>
-  <td>Amount of gas used by this transaction.</td>
+  <td>Post Transaction State Root</td>
+  <td>root</td>
+  <td>String</td>
+  <td>^0x[0-9a-f]{64}$</td>
+  <td>Storage root after to executing the transaction. <b>NOTE:</b> Unlike transaction receipts returned by <code>eth_getTransactionReceipt</code>, this field is required for all transactions.</td>
+  <td>Yes</td>
 </tr>
 <tr>
-  <td>Block Number</td>
-  <td>blockNumber</td>
-  <td>Hex string</td>
-  <td></td>
+  <td>Status</td>
+  <td>status</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
+  <td><code>1</code> if the transaction is successful and ```0``` if the transaction failed.</td>
+  <td>Yes</td>
 </tr>
 <tr>
-  <td>Block Hash</td>
-  <td>blockHash</td>
-  <td>Hex string</td>
-  <td></td>
+  <td>Effective Gas Price</td>
+  <td>effectiveGasPrice</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
+  <td>The actual value per gas deducted from the sender's account. Before EIP-1559, this is equal to the transaction's gas price. After, it is equal to baseFeePerGas + min(maxFeePerGas - baseFeePerGas, maxPriorityFeePerGas).</td>
+  <td>Yes</td>
 </tr>
 <tr>
-  <td>Transaction Index</td>
-  <td>txIndex</td>
-  <td>Number</td>
-  <td>Index of this transaction within the block.</td>
-</tr>
-<tr>
-  <td>Return Value</td>
-  <td>returnValue</td>
-  <td>Hex string</td>
-  <td></td>
+  <td>Blob Gas Price</td>
+  <td>blobGasPrice</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
+  <td>The actual value per gas deducted from the sender's account for blob gas. Only specified for blob transactions as defined by EIP-4844.</td>
+  <td>No</td>
 </tr>
 </tbody>
 </table>
@@ -602,57 +666,83 @@ One ```ReceiptsType``` structure is returned for each transaction. The informati
   <th>Field</th>
   <th>JSON Name</th>
   <th>JSON Type</th>
+  <th>Pattern</th>
   <th>Description</th>
+  <th>Required</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>Address</td>
-  <td>address</td>
-  <td>Hex string</td>
-  <td>Address of contract that emitted the event.</td>
-</tr>
-<tr>
-  <td>Topics</td>
-  <td>topics</td>
-  <td>Array or Hex string</td>
-  <td>Array of log topics.</td>
-</tr>
-<tr>
-  <td>Data</td>
-  <td>data</td>
-  <td>Hex string</td>
-  <td>Event parameters that are not topics.</td>
-</tr>
-<tr>
-  <td>Block Number</td>
-  <td>blockNumber</td>
-  <td>Hex string</td>
+  <td>Removed</td>
+  <td>removed</td>
+  <td>Boolean</td>
   <td></td>
+  <td>The ```Removed``` field is true if this log was reverted due to a chain reorganisation.</td>
+  <td>No</td>
+</tr>
+<tr>
+  <td>Log Index</td>
+  <td>logIndex</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
+  <td>Index of this log within the transaction.</td>
+  <td>No</td>
+</tr>
+<tr>
+  <td>Transaction Index</td>
+  <td>transactionIndex</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
+  <td>Index of this transaction within the block.</td>
+  <td>No</td>
+</tr>
+<tr>
+  <td>Transaction Hash</td>
+  <td>transactionHash</td>
+  <td>String</td>
+  <td>^0x[0-9a-f]{64}$</td>
+  <td></td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Block Hash</td>
   <td>blockHash</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x[0-9a-f]{64}$</td>
   <td></td>
+  <td>No</td>
 </tr>
 <tr>
-  <td>Transaction Index</td>
-  <td>txIndex</td>
-  <td>Number</td>
-  <td>Index of this transaction within the block.</td>
+  <td>Block Number</td>
+  <td>blockNumber</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
+  <td></td>
+  <td>No</td>
 </tr>
 <tr>
-  <td>Index</td>
-  <td>index</td>
-  <td>Number</td>
-  <td>Index of this log within the transaction.</td>
+  <td>Address</td>
+  <td>address</td>
+  <td>String</td>
+  <td>^0x[0-9,a-f,A-F]{40}$</td>
+  <td>Address of contract that emitted the event.</td>
+  <td>No</td>
 </tr>
 <tr>
-  <td>Removed</td>
-  <td>removed</td>
-  <td>Boolean</td>
-  <td>The ```Removed``` field is true if this log was reverted due to a chain reorganisation.</td>
+  <td>Data</td>
+  <td>data</td>
+  <td>String</td>
+  <td>^0x[0-9a-f]*$</td>
+  <td>Event parameters that are not topics.</td>
+  <td>No</td>
+</tr>
+<tr>
+  <td>Topics</td>
+  <td>topics</td>
+  <td>Array String</td>
+  <td>Array of ^0x[0-9a-f]{64}$</td>
+  <td>Array of log topics.</td>
+  <td>No</td>
 </tr>
 </tbody>
 </table>
