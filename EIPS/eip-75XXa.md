@@ -110,7 +110,7 @@ The following table describes the information contained in the ```BlockInformati
   <td>Final Block Storage</td>
   <td>blockStorage</td>
   <td>Array of <a href="#StorageType">StorageType</a></td>
-  <td>Array of storage information after the last transaction in the block. This storage information includes the storage slots to faciliate _proof of consensus_ (see <a href="#./eip-75XXb.md">EIP-75XXb</a>) and bridging (see <a href="#./eip-75XXc.md">EIP-75XXc</a>).</td>
+  <td>Array of storage information after the last transaction in the block. This storage information includes the storage slots to faciliate <i>proof of consensus</i> (see <a href="./eip-75XXb.md">EIP-75XXb</a>) and bridging (see <a href="./eip-75XXc.md">EIP-75XXc</a>).</td>
 </tr>
 <tr>
   <td>Transaction Storage</td>
@@ -218,7 +218,7 @@ The following table describes the information contained in the ```BlockHeaderTyp
   <td>Extra Data</td>
   <td>extraData</td>
   <td>Hex string</td>
-  <td>Information about the consensus algorithm and signers. See <a href="#./eip-75XXb.md">EIP-75XXb</a> for values for this field.
+  <td>Information about the consensus algorithm and signers. See <a href="./eip-75XXb.md">EIP-75XXb</a> for values for this field.
   </td>
 </tr>
 <tr>
