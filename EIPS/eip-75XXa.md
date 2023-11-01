@@ -110,7 +110,7 @@ The following table describes the information contained in the ```BlockInformati
   <td>Final Block Storage</td>
   <td>blockStorage</td>
   <td>Array of <a href="#StorageType">StorageType</a></td>
-  <td>Array of storage information after the last transaction in the block. This storage information includes the storage slots to faciliate _proof of consensus_ and bridging.</td>
+  <td>Array of storage information after the last transaction in the block. This storage information includes the storage slots to faciliate _proof of consensus_ (see [EIP-75XXb](./eip-75XXb.md)) and bridging (see [EIP-75XXc](./eip-75XXc.md)).</td>
 </tr>
 <tr>
   <td>Transaction Storage</td>
@@ -218,10 +218,7 @@ The following table describes the information contained in the ```BlockHeaderTyp
   <td>Extra Data</td>
   <td>extraData</td>
   <td>Hex string</td>
-  <td>RLP encoded information about the consensus algorithm and signers. The sub-fields are:
-    <ul>
-     <li>Consensus algorithm and signature type identifier. TODO for possible values.</li>
-     <li>Array of signatures. TODO for format. Format is based on consensus algorithm and signature format</li>
+  <td>Information about the consensus algorithm and signers. See [EIP-75XXb](./eip-75XXb.md) for values for this field.
   </td>
 </tr>
 <tr>

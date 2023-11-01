@@ -57,6 +57,10 @@ The following storage slots need to be proven as part of the Final Block Storage
 * Each validator that signed the block header.
 * Total number of validators.
 
+### Format of Extra Data Block Header Field
+
+TODO. This field needs to contain at a minimum the validators that have signed the block.
+
 
 ### Validator Contract
 
