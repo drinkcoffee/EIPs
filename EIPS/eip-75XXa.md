@@ -54,7 +54,7 @@ TODO Things to be defined:
 
 *Parameters*: 
 
-* Block number: Hex string.
+* Block number: String with format: ```^0x([1-9a-f]+[0-9a-f]*|0)$```
 
 *Returns*:
 
@@ -65,7 +65,7 @@ TODO Things to be defined:
 
 *Parameters*: 
 
-* Block hash: Hex string.
+* Block hash: String with format: ```^0x[0-9a-f]{64}$```
 
 *Returns*:
 
@@ -84,45 +84,59 @@ The following table describes the information contained in the ```BlockInformati
   <th>Field</th>
   <th>JSON Name</th>
   <th>JSON Type</th>
+  <th>Pattern</th>
   <th>Description</th>
+  <th>Required</th>
 </tr>
 </thead>
 <tbody>
 <tr>
   <td>Chain Id</td>
   <td>chainID</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
   <td>Chain id of rollup.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Block Header</td>
   <td>header</td>
   <td><a href="#BlockHeaderType">BlockHeaderType</a></td>
+  <td></td>
   <td>Block header of block being proven.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Transactions</td>
   <td>transactions</td>
   <td>Array of <a href="#TransactionType">TransactionType</a></td>
+  <td></td>
   <td>Transactions that executed in the block being proven.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Final Block Storage</td>
   <td>blockStorage</td>
   <td>Array of <a href="#StorageType">StorageType</a></td>
+  <td></td>
   <td>Array of storage information after the last transaction in the block. This storage information includes the storage slots to faciliate <i>proof of consensus</i> (see <a href="./eip-75XXb.md">EIP-75XXb</a>) and bridging (see <a href="./eip-75XXc.md">EIP-75XXc</a>).</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Transaction Storage</td>
   <td>transactionStorage</td>
   <td>Array of <a href="#StorageTraceType">StorageTraceType</a></td>
+  <td></td>
   <td>Storage information at the start of each transaction. The storage information is for any storage slot within any account that is read from or written to during the execution of the transaction.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Transaction Receipts</td>
   <td>transactionReceipts</td>
   <td>Array of <a href="#ReceiptType">ReceiptType</a></td>
+  <td></td>
   <td>One transaction receipt for each transaction in the block.</td>
+  <td>Yes</td>
 </tr>
 </tbody>
 </table>
@@ -138,106 +152,140 @@ The following table describes the information contained in the ```BlockHeaderTyp
   <th>Field</th>
   <th>JSON Name</th>
   <th>JSON Type</th>
+  <th>Pattern</th>
   <th>Description</th>
+  <th>Required</th>
 </tr>
 </thead>
 <tbody>
 <tr>
   <td>ParentHash</td>
   <td>parentHash</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x[0-9a-f]{64}$</td>
   <td>Block hash of parent block.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>UncleHash</td>
   <td>sha3Uncles</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x[0-9a-f]{64}$</td>
   <td>Hash or Ommers. <code>0x00</code> if the consensus protocol does not support Ommers.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Coinbase</td>
   <td>miner</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x[0-9,a-f,A-F]{40}$</td>
   <td>Address of entity that mined this block.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>State Root</td>
   <td>stateRoot</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x[0-9a-f]{64}$</td>
   <td>Root of storage tree.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Transaction Root</td>
   <td>transactionsRoot</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x[0-9a-f]{64}$</td>
   <td>Root of transaction tree for transactions contained in this block.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Transaction Receipts Root</td>
   <td>receiptsRoot</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x[0-9a-f]{64}$</td>
   <td>Root of transaction receipts tree for transactions contained in this block.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Bloom</td>
   <td>logsBloom</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x[0-9a-f]{512}$</td>
   <td>Bloom filter for logs emitted by transactions in this block.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Difficulty</td>
   <td>difficulty</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
   <td>Block difficults, previous value of RANDAO, or <code>0x00</code> depending on the decentralized sequencer.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Block Number</td>
   <td>number</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
   <td>Block number. Block 0 is the virtual block created from the genesis file.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Gas Limit</td>
   <td>getLimit</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
   <td>The maximum amount of gas that could be used in this block.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Gas Used</td>
   <td>getUsed</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
   <td>The amount of gas used by the transactions in this block.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Block time stamp</td>
   <td>timestamp</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
   <td>The time a sequencer produced this block.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Extra Data</td>
   <td>extraData</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x[0-9a-f]*$</td>
   <td>Information about the consensus algorithm and signers. See <a href="./eip-75XXb.md">EIP-75XXb</a> for values for this field.
+  <td>Yes</td>
   </td>
 </tr>
 <tr>
   <td>Mix Digest</td>
   <td>mixHash</td>
-  <td>Hex string</td>
-  <td>TODO</td>
+  <td>String</td>
+  <td>^0x[0-9a-f]{64}$</td>
+  <td></td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Block Nonce</td>
   <td>nonce</td>
-  <td>Hex string</td>
-  <td>TODO</td>
+  <td>String</td>
+  <td>^0x[0-9a-f]{16}$</td>
+  <td></td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Base Fee</td>
   <td>baseFeePerGas</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
   <td>EIP 1559 base fee. TODO: Should EIP 1559 be optional?</td>
+  <td>Yes</td>
 </tr>
 </tbody>
 </table>
@@ -253,81 +301,107 @@ The following table describes the information contained in the ```TransactionTyp
   <th>Field</th>
   <th>JSON Name</th>
   <th>JSON Type</th>
+  <th>Pattern</th>
   <th>Description</th>
+  <th>Required</th>
 </tr>
 </thead>
 <tbody>
 <tr>
   <td>Type</td>
   <td>type</td>
-  <td>Number</td>
+  <td>String</td>
+  <td>^0x([0-9,a-f,A-F]?){1,2}$</td>
   <td></td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Nonce</td>
   <td>nonce</td>
-  <td>Number</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
   <td></td>
+  <td>Yes</td>
 </tr>
 <tr>
-  <td>Gas</td>
+  <td>Gas Limit</td>
   <td>gas</td>
-  <td>Number</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
   <td></td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Gas Price</td>
   <td>gasPrice</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
   <td></td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>From</td>
   <td>from</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x[0-9,a-f,A-F]{40}$</td>
   <td>EOA that submitted this transaction.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>To</td>
   <td>to</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x[0-9,a-f,A-F]{40}$</td>
   <td>EOA of contract address that transaction targetted at.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Value</td>
   <td>value</td>
-  <td>Hex string</td>
-  <td></td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
+  <td>Amount in Wei sent to the <code>To</code> account.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Data</td>
-  <td>data</td>
-  <td>Hex string</td>
+  <td>input</td>
+  <td>String</td>
+  <td>^0x[0-9a-f]*$</td>
   <td>Transaction data. For ABI encoding compliant contracts, this is a function selector followed by parameters.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>V</td>
   <td>v</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
   <td></td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>R</td>
   <td>r</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
   <td></td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>S</td>
   <td>s</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
   <td></td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>IsCreate</td>
   <td>isCreate</td>
   <td>Boolean</td>
   <td></td>
+  <td></td>
+  <td>Yes</td>
 </tr>
 </tbody>
 </table>
@@ -343,7 +417,9 @@ Storage Type contains a proof for a specific storage slot in a specific account.
   <th>Field</th>
   <th>JSON Name</th>
   <th>JSON Type</th>
+  <th>Pattern</th>
   <th>Description</th>
+  <th>Required</th>
 </tr>
 </thead>
 <tbody>
@@ -351,13 +427,17 @@ Storage Type contains a proof for a specific storage slot in a specific account.
   <td>Account Proofs</td>
   <td>proofs</td>
   <td>Array of <a href="#AccountProofType">AccountProofType</a></td>
+  <td></td>
   <td>Proof for account information.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Storage Proofs</td>
   <td>storageProofs</td>
   <td>Array of <a href="#StorageProofType">StorageProofType</a></td>
+  <td></td>
   <td>Proofs for storage slots within accounts.</td>
+  <td>Yes</td>
 </tr>
 </tbody>
 </table>
@@ -373,33 +453,35 @@ Storage Type contains a proof for a specific storage slot in a specific account.
   <th>Field</th>
   <th>JSON Name</th>
   <th>JSON Type</th>
+  <th>Pattern</th>
   <th>Description</th>
+  <th>Required</th>
 </tr>
 </thead>
 <tbody>
 <tr>
   <td>StorageRootBefore</td>
   <td>storageRootBefore</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x[0-9a-f]{64}$</td>
   <td>Storage root prior to executing the transaction.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Account Proofs</td>
   <td>proofs</td>
   <td>Array of <a href="#AccountProofType">AccountProofType</a></td>
+  <td></td>
   <td>Proof for account information.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Storage Proofs</td>
   <td>storageProofs</td>
   <td>Array of <a href="#StorageProofType">StorageProofType</a></td>
+  <td></td>
   <td>Proofs for storage slots within accounts.</td>
-</tr>
-<tr>
-  <td>Deletion Proofs</td>
-  <td>deletionProofs</td>
-  <td>Array of <a href="#AccountProofType">AccountProofType</a></td>
-  <td>Proof for accounts that have ```selfdescructed``` during the execution of the transaction.</td>
+  <td>Yes</td>
 </tr>
 </tbody>
 </table>
@@ -416,39 +498,51 @@ Account Proof Type contains a proof for a specific account. The following table 
   <th>Field</th>
   <th>JSON Name</th>
   <th>JSON Type</th>
+  <th>Pattern</th>
   <th>Description</th>
+  <th>Required</th>
 </tr>
 </thead>
 <tbody>
 <tr>
   <td>Account</td>
   <td>account</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x[0-9,a-f,A-F]{40}$</td>
   <td>Address of an account.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Nonce</td>
   <td>nonce</td>
-  <td>Number</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
   <td>Account nonce.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Balance</td>
   <td>balance</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x([1-9a-f]+[0-9a-f]*|0)$</td>
   <td>Account balance.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Code</td>
   <td>code</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x[0-9a-f]*$</td>
   <td>Account's contract code.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Proof</td>
   <td>proof</td>
-  <td>Array of hex string</td>
-  <td>Merkle proof for an account. The array of hex string is an array of hashes.</td>
+  <td>Array of String</td>
+  <td>Array of ^0x[0-9a-f]{64}$</td>
+  <td>Merkle proof for an account. An array of hashes.</td>
+  <td>Yes</td>
 </tr>
 </tbody>
 </table>
@@ -464,33 +558,43 @@ Storage Proof Type contains a proof for a specific storage slot in a specific ac
   <th>Field</th>
   <th>JSON Name</th>
   <th>JSON Type</th>
+  <th>Pattern</th>
   <th>Description</th>
+  <th>Required</th>
 </tr>
 </thead>
 <tbody>
 <tr>
   <td>Account</td>
   <td>account</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x[0-9,a-f,A-F]{40}$</td>
   <td>Address of an account.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Slot</td>
   <td>slot</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x[0-9a-f]{64}$</td>
   <td>Storage slot number.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Value</td>
   <td>value</td>
-  <td>Hex string</td>
+  <td>String</td>
+  <td>^0x[0-9a-f]{64}$</td>
   <td>Value at the storage slot.</td>
+  <td>Yes</td>
 </tr>
 <tr>
   <td>Proof</td>
   <td>proof</td>
-  <td>Array of hex string</td>
-  <td>Merkle proof for a storage slot. The array of hex string is an array of hashes.</td>
+  <td>Array of String</td>
+  <td>Array of ^0x[0-9a-f]{64}$</td>
+  <td>Merkle proof for a storage slot. The array is an array of hashes.</td>
+  <td>Yes</td>
 </tr>
 </tbody>
 </table>
