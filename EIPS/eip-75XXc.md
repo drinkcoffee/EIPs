@@ -22,7 +22,7 @@ Decentralized sequencers for zero knowledge rollups can be implemented as a bloc
 
 ![Decentralized Sequencer Architecture](../assets/eip-75XX/architecture.png)
 
-This specification defines values to facilitate an L2 to L1 bridge. The bridge design is not dictated by this specification. Instead this specification specifies a minimal set of storage slots that need to be proven for each block. 
+This specification defines values to facilitate an L2 to L1 bridge. The bridge design is not dictated by this specification. Instead this specification specifies a minimal set of storage slots that need to be proven for each block to allow for the operation of the bridge. 
 
 This specification defines:
 
@@ -39,17 +39,34 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ### Initialisation
 
-TODO Things to be defined:
+The table below described the configuration values that must be supplied to the blockchain client(s) and the prover at system start-up. 
 
-* Address of L2 to L1 bridge contract.
-* Storage slot of WithdrawTreeRoot in the L2 to L1 bridge contract.
+<table>
+<thead>
+<tr>
+  <th>Name</th>
+  <th>Type</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>L2L1BridgeContractAddress</td>
+  <td>ADDRESS</td>
+  <td>Address of L2 to L1 arbitrary message bridge contract.</td>
+</tr>
+<tr>
+  <td>L2L1WithdrawTreeRootStorageSlot</td>
+  <td>UINT256</td>
+  <td>Storage slot of WithdrawTreeRoot value within the L2 to L1 arbitrary message bridge contract.</td>
+</tr>
+</tbody>
+</table>
 
 
 ### Final Block Storage to be Proven
 
-The following storage slots need to be proven as part of the Final Block Storage section of the BlockInformationType defined in EIP-75XXa:
-
-* WithdrawalTreeRoot for the L2 to L1 arbitrary message bridge.
+The storage slots defined in the initialisation above need to be proven as part of the Final Block Storage of the BlockInformationType defined in EIP-75XXa (see [EIP-75XXa](./eip-75XXa.md#blockinformationtype)). That is, the WithdrawalTreeRoot for the L2 to L1 arbitrary message bridge contract needs to be proven.
 
 
 ### L2 to L1 Bridge Contract
@@ -66,9 +83,18 @@ bytes32 l2L1WithdrawalTreeRoot;
 
 This section explains the rationale behind design decisions contained in this specification.
 
-#### L2 to L1 Bridge Contract
+### Having Bridge information in Final Block Storage to be Proven
 
-The ```l2L1WithdrawalTreeRoot``` is the only storage value defined for the L2 to L1 bridge. This is the root of a Sparse Merkle Tree of all crosschain messages that have been processed on L2. When this value is available via the proof on L1, users will be able to submit exit transactions based on this Merkle Tree Root value. 
+The reason for proving the value of ```l2L1WithdrawalTreeRoot``` from the L2 to L1 arbitrary message bridge contract is so that the value can be published as part of the proof, and then submitted to the verifier contract on L1. The verifier contract could then have this value readily available, rather than needing a Merkle Proof to be submitted, so that crosschain bridges can then efficiently use the value as part of their bridging system.
+
+The reason for proving the value of ```l2L1WithdrawalTreeRoot``` at the end of the block is so that crosschain bridge systems can use this value to validate crosschain transfers that have occurred during the block. Depending on the design of the bridging system, the single value may allow all historic crosschain transactions to be validated.
+
+The reason for proving the value of ```l2L1WithdrawalTreeRoot``` even if it hasn't changed is to simplify the logic of the proving system and verification contract.
+
+
+### L2 to L1 Bridge Contract
+
+The ```l2L1WithdrawalTreeRoot``` is the only storage value defined for the L2 to L1 bridge. This could be the root of a Sparse Merkle Tree of all crosschain messages that have been processed on L2. When this value is available via the proof on L1, users will be able to submit exit transactions based on this Merkle Tree Root value. 
 
 
 ## Backwards Compatibility
