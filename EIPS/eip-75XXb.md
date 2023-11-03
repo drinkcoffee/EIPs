@@ -1,7 +1,7 @@
 ---
 eip: 75XXb
 title: Prover and Sequencer Consensus API
-description: Consensus part of interface between Provers and Decentralized Sequencer Blockchain Clients
+description: Consensus part of interface between Provers and Sequencer Blockchain Clients
 author: Peter Robinson (@drinkcoffee)
 discussions-to: TODO Eth Magicians URL
 status: Draft
